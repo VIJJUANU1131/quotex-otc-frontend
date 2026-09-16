@@ -8,165 +8,152 @@
 
 <style>
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b1020;
-  color: white;
+    margin: 0;
+    background: #0b1020;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
 }
 
 .container {
-  max-width: 500px;
-  margin: auto;
-  padding: 15px;
+    width: 100%;
+    max-width: 520px;
+    margin: auto;
+    padding: 15px;
 }
 
 h1 {
-  text-align: center;
-  color: #00e5ff;
-  font-size: 25px;
+    text-align: center;
+    color: #00e5ff;
+    font-size: 24px;
 }
 
 .card {
-  background: #151c32;
-  border-radius: 15px;
-  padding: 18px;
-  margin-top: 15px;
-  box-shadow: 0 5px 20px rgba(0,0,0,.3);
+    background: #151c32;
+    padding: 18px;
+    margin-top: 15px;
+    border-radius: 15px;
 }
 
 label {
-  display: block;
-  margin-bottom: 7px;
-  color: #aaa;
+    display: block;
+    color: #aaa;
+    margin-bottom: 8px;
 }
 
 select,
 button {
-  width: 100%;
-  padding: 13px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 16px;
 }
 
 select {
-  background: #222b45;
-  color: white;
+    background: #222b45;
+    color: white;
 }
 
 button {
-  margin-top: 15px;
-  background: #00c853;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+    margin-top: 12px;
+    background: #00c853;
+    color: white;
+    font-weight: bold;
 }
 
-button:active {
-  transform: scale(.98);
+button:disabled {
+    background: #555;
 }
 
 .status {
-  text-align: center;
-  font-weight: bold;
-  margin-top: 10px;
+    text-align: center;
+    margin-top: 12px;
+    font-weight: bold;
 }
 
 .signal {
-  text-align: center;
-  font-size: 42px;
-  font-weight: bold;
-  margin: 15px 0;
+    text-align: center;
+    font-size: 42px;
+    font-weight: bold;
+    margin: 20px 0;
 }
 
 .buy {
-  color: #00e676;
+    color: #00e676;
 }
 
 .sell {
-  color: #ff1744;
+    color: #ff1744;
 }
 
 .wait {
-  color: #ffc107;
+    color: #ffc107;
 }
 
 .info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
 .box {
-  background: #202941;
-  padding: 12px;
-  border-radius: 10px;
-  text-align: center;
+    background: #202941;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
 }
 
 .value {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
 }
 
 .timer {
-  text-align: center;
-  font-size: 30px;
-  color: #00e5ff;
-  margin-top: 10px;
+    text-align: center;
+    color: #00e5ff;
+    font-size: 28px;
+    margin-top: 15px;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+.clock {
+    text-align: center;
+    font-size: 18px;
 }
 
-.stat {
-  background: #202941;
-  padding: 12px 5px;
-  text-align: center;
-  border-radius: 10px;
+.error {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #30151a;
+    color: #ff8a8a;
+    font-size: 13px;
+    word-break: break-word;
+    display: none;
 }
 
 .history {
-  max-height: 300px;
-  overflow-y: auto;
+    max-height: 350px;
+    overflow-y: auto;
 }
 
 .history-item {
-  background: #202941;
-  padding: 10px;
-  margin-bottom: 7px;
-  border-radius: 8px;
-  font-size: 13px;
-}
-
-.win {
-  color: #00e676;
-  font-weight: bold;
-}
-
-.loss {
-  color: #ff1744;
-  font-weight: bold;
-}
-
-.pending {
-  color: #ffc107;
-  font-weight: bold;
+    background: #202941;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 9px;
+    font-size: 13px;
 }
 
 .small {
-  text-align: center;
-  color: #888;
-  font-size: 12px;
-  margin-top: 15px;
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+    margin-top: 15px;
 }
 </style>
 </head>
@@ -197,7 +184,7 @@ button:active {
 
 </select>
 
-<button onclick="generateSignal()">
+<button id="generateBtn">
 GENERATE LIVE SIGNAL
 </button>
 
@@ -212,12 +199,12 @@ WAIT
 <div class="info">
 
 <div class="box">
-<div>PRICE</div>
+PRICE
 <div id="price" class="value">--</div>
 </div>
 
 <div class="box">
-<div>STRENGTH</div>
+STRENGTH
 <div id="strength" class="value">--</div>
 </div>
 
@@ -227,6 +214,8 @@ WAIT
 Next Signal: <span id="timer">60</span>s
 </div>
 
+<div id="errorBox" class="error"></div>
+
 </div>
 
 
@@ -234,34 +223,8 @@ Next Signal: <span id="timer">60</span>s
 
 <h3>🇮🇳 Indian Time</h3>
 
-<div id="clock" class="value" style="text-align:center;">
+<div id="clock" class="clock">
 --
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>📈 Result Tracker</h3>
-
-<div class="stats">
-
-<div class="stat">
-WIN
-<div id="wins" class="value">0</div>
-</div>
-
-<div class="stat">
-LOSS
-<div id="losses" class="value">0</div>
-</div>
-
-<div class="stat">
-WIN RATE
-<div id="winrate" class="value">0%</div>
-</div>
-
 </div>
 
 </div>
@@ -277,8 +240,9 @@ No signals yet
 
 </div>
 
+
 <div class="small">
-Real-data only • No fake signals
+Real OTC candle data only • No fake signals
 </div>
 
 </div>
@@ -286,335 +250,618 @@ Real-data only • No fake signals
 
 <script>
 
+/* ==============================
+   BACKEND
+============================== */
+
 const BACKEND_URL =
-"https://quotex-otc-backend.onrender.com";
+    "https://quotex-otc-backend.onrender.com";
+
+
+/* ==============================
+   VARIABLES
+============================== */
 
 let timerValue = 60;
 let timerInterval = null;
+let requestRunning = false;
 
 let historyData =
-JSON.parse(localStorage.getItem("otcHistory") || "[]");
-
-
-/* =========================
-   INDIAN CLOCK
-========================= */
-
-function updateClock() {
-
-  const now = new Date();
-
-  const time = now.toLocaleString("en-IN", {
-    timeZone: "Asia/Kolkata",
-    dateStyle: "medium",
-    timeStyle: "medium"
-  });
-
-  document.getElementById("clock").textContent = time;
-}
-
-setInterval(updateClock, 1000);
-updateClock();
-
-
-/* =========================
-   GENERATE SIGNAL
-========================= */
-
-async function generateSignal() {
-
-  const pair =
-    document.getElementById("pair").value;
-
-  const status =
-    document.getElementById("status");
-
-  const signal =
-    document.getElementById("signal");
-
-  const price =
-    document.getElementById("price");
-
-  const strength =
-    document.getElementById("strength");
-
-
-  status.textContent = "LOADING...";
-
-  signal.textContent = "WAIT";
-  signal.className = "signal wait";
-
-  price.textContent = "--";
-  strength.textContent = "--";
-
-
-  try {
-
-    const url =
-      BACKEND_URL +
-      "/api/v1/candles?symbol=" +
-      encodeURIComponent(pair);
-
-
-    console.log("Request:", url);
-
-
-    const response =
-      await fetch(url);
-
-
-    const data =
-      await response.json();
-
-
-    console.log("Backend Data:", data);
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.message ||
-        "Backend error"
-      );
-
-    }
-
-
-    status.textContent =
-      data.status || "UNKNOWN";
-
-
-    price.textContent =
-      data.price !== null &&
-      data.price !== undefined
-      ? data.price
-      : "--";
-
-
-    strength.textContent =
-      data.strength !== undefined
-      ? data.strength + "%"
-      : "--";
-
-
-    const currentSignal =
-      data.signal || "WAIT";
-
-
-    signal.textContent =
-      currentSignal;
-
-
-    if (currentSignal === "BUY") {
-
-      signal.className =
-        "signal buy";
-
-    }
-    else if (currentSignal === "SELL") {
-
-      signal.className =
-        "signal sell";
-
-    }
-    else {
-
-      signal.className =
-        "signal wait";
-
-    }
-
-
-    /*
-       Only BUY / SELL signals
-       are added to history.
-    */
-
-    if (
-      currentSignal === "BUY" ||
-      currentSignal === "SELL"
-    ) {
-
-      addSignalToHistory({
-        pair: pair,
-        signal: currentSignal,
-        entry: data.price,
-        strength: data.strength || 0,
-        time: new Date().toISOString()
-      });
-
-    }
-
-
-  } catch (error) {
-
-    console.error(
-      "Signal Error:",
-      error
+    JSON.parse(
+        localStorage.getItem("otcSignalHistory") || "[]"
     );
 
 
-    status.textContent =
-      "OFFLINE";
+/* ==============================
+   ELEMENTS
+============================== */
 
+const pairElement =
+    document.getElementById("pair");
 
-    signal.textContent =
-      "WAIT";
+const generateBtn =
+    document.getElementById("generateBtn");
 
+const statusElement =
+    document.getElementById("status");
 
-    signal.className =
-      "signal wait";
+const signalElement =
+    document.getElementById("signal");
 
+const priceElement =
+    document.getElementById("price");
 
-    price.textContent =
-      "--";
+const strengthElement =
+    document.getElementById("strength");
 
+const timerElement =
+    document.getElementById("timer");
 
-    strength.textContent =
-      "--";
+const errorBox =
+    document.getElementById("errorBox");
 
-  }
-
-}
-
-
-/* =========================
-   HISTORY
-========================= */
-
-function addSignalToHistory(item) {
-
-  historyData.unshift(item);
-
-  if (historyData.length > 20) {
-
-    historyData =
-      historyData.slice(0, 20);
-
-  }
-
-
-  localStorage.setItem(
-    "otcHistory",
-    JSON.stringify(historyData)
-  );
-
-
-  renderHistory();
-
-}
-
-
-/* =========================
-   RENDER HISTORY
-========================= */
-
-function renderHistory() {
-
-  const box =
+const historyElement =
     document.getElementById("history");
 
 
-  if (!historyData.length) {
+/* ==============================
+   INDIAN CLOCK
+============================== */
 
-    box.innerHTML =
-      "No signals yet";
+function updateClock() {
 
-    return;
+    const now = new Date();
 
-  }
-
-
-  box.innerHTML =
-    historyData.map((item, index) => {
-
-      const time =
-        new Date(item.time)
-        .toLocaleTimeString("en-IN", {
-          timeZone: "Asia/Kolkata"
+    const text =
+        now.toLocaleString("en-IN", {
+            timeZone: "Asia/Kolkata",
+            dateStyle: "medium",
+            timeStyle: "medium"
         });
 
+    document.getElementById("clock")
+        .textContent = text;
+}
 
-      return `
+updateClock();
 
-        <div class="history-item">
+setInterval(updateClock, 1000);
 
-          <b>${item.pair}</b><br>
 
-          Signal:
-          <b>${item.signal}</b><br>
+/* ==============================
+   SHOW ERROR
+============================== */
 
-          Entry:
-          ${item.entry ?? "--"}<br>
+function showError(message) {
 
-          Strength:
-          ${item.strength}%<br>
+    errorBox.style.display = "block";
 
-          Time:
-          ${time}<br>
+    errorBox.textContent =
+        "Backend: " + message;
+}
 
-          Result:
-          <span id="result-${index}"
-                class="pending">
-            PENDING
-          </span>
 
-        </div>
+/* ==============================
+   HIDE ERROR
+============================== */
 
-      `;
+function hideError() {
 
-    }).join("");
+    errorBox.style.display = "none";
 
+    errorBox.textContent = "";
+}
+
+
+/* ==============================
+   SET WAIT
+============================== */
+
+function setWait() {
+
+    signalElement.textContent = "WAIT";
+
+    signalElement.className =
+        "signal wait";
+}
+
+
+/* ==============================
+   SIGNAL ANALYSIS
+============================== */
+
+function calculateSignal(candles) {
+
+    if (!Array.isArray(candles)) {
+        return {
+            signal: "WAIT",
+            strength: 0
+        };
+    }
+
+    if (candles.length < 3) {
+        return {
+            signal: "WAIT",
+            strength: 0
+        };
+    }
+
+
+    const c1 =
+        candles[candles.length - 1];
+
+    const c2 =
+        candles[candles.length - 2];
+
+    const c3 =
+        candles[candles.length - 3];
+
+
+    const close1 =
+        Number(c1.close);
+
+    const open1 =
+        Number(c1.open);
+
+    const close2 =
+        Number(c2.close);
+
+    const open2 =
+        Number(c2.open);
+
+    const close3 =
+        Number(c3.close);
+
+    const open3 =
+        Number(c3.open);
+
+
+    if (
+        !Number.isFinite(close1) ||
+        !Number.isFinite(open1) ||
+        !Number.isFinite(close2) ||
+        !Number.isFinite(open2) ||
+        !Number.isFinite(close3) ||
+        !Number.isFinite(open3)
+    ) {
+        return {
+            signal: "WAIT",
+            strength: 0
+        };
+    }
+
+
+    let buyScore = 0;
+    let sellScore = 0;
+
+
+    /* Current candle */
+
+    if (close1 > open1) {
+        buyScore += 2;
+    }
+
+    if (close1 < open1) {
+        sellScore += 2;
+    }
+
+
+    /* Previous candle */
+
+    if (close2 > open2) {
+        buyScore += 1;
+    }
+
+    if (close2 < open2) {
+        sellScore += 1;
+    }
+
+
+    /* Third candle */
+
+    if (close3 > open3) {
+        buyScore += 1;
+    }
+
+    if (close3 < open3) {
+        sellScore += 1;
+    }
+
+
+    let signal = "WAIT";
+    let strength = 0;
+
+
+    if (buyScore > sellScore) {
+
+        signal = "BUY";
+
+        strength =
+            Math.round(
+                (buyScore / 4) * 100
+            );
+
+    }
+    else if (sellScore > buyScore) {
+
+        signal = "SELL";
+
+        strength =
+            Math.round(
+                (sellScore / 4) * 100
+            );
+
+    }
+
+
+    return {
+        signal: signal,
+        strength: Math.min(strength, 100)
+    };
+}
+
+
+/* ==============================
+   GENERATE SIGNAL
+============================== */
+
+async function generateSignal() {
+
+    if (requestRunning) {
+        return;
+    }
+
+    requestRunning = true;
+
+    generateBtn.disabled = true;
+
+    hideError();
+
+    statusElement.textContent =
+        "CONNECTING...";
+
+    setWait();
+
+    priceElement.textContent = "--";
+
+    strengthElement.textContent = "--";
+
+
+    const pair =
+        pairElement.value;
+
+
+    try {
+
+        const url =
+            BACKEND_URL +
+            "/api/v1/candles?symbol=" +
+            encodeURIComponent(pair);
+
+
+        const response =
+            await fetch(url, {
+                method: "GET",
+                cache: "no-store"
+            });
+
+
+        let data;
+
+        try {
+
+            data =
+                await response.json();
+
+        }
+        catch {
+
+            throw new Error(
+                "Backend returned invalid JSON"
+            );
+        }
+
+
+        console.log(
+            "OTC Backend:",
+            data
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                "HTTP " + response.status
+            );
+        }
+
+
+        if (
+            data.status !== "success" &&
+            data.connection !== "CONNECTED"
+        ) {
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                "OTC data unavailable"
+            );
+        }
+
+
+        const candles =
+            Array.isArray(data.candles)
+                ? data.candles
+                : [];
+
+
+        if (candles.length < 3) {
+
+            throw new Error(
+                "Not enough real OTC candles"
+            );
+        }
+
+
+        const latest =
+            candles[candles.length - 1];
+
+
+        if (
+            latest &&
+            latest.close !== undefined &&
+            latest.close !== null
+        ) {
+
+            priceElement.textContent =
+                latest.close;
+        }
+
+
+        const result =
+            calculateSignal(candles);
+
+
+        statusElement.textContent =
+            "OTC LIVE";
+
+
+        strengthElement.textContent =
+            result.strength + "%";
+
+
+        if (result.signal === "BUY") {
+
+            signalElement.textContent =
+                "BUY";
+
+            signalElement.className =
+                "signal buy";
+
+            addHistory(
+                pair,
+                "BUY",
+                latest.close,
+                result.strength
+            );
+
+        }
+        else if (result.signal === "SELL") {
+
+            signalElement.textContent =
+                "SELL";
+
+            signalElement.className =
+                "signal sell";
+
+            addHistory(
+                pair,
+                "SELL",
+                latest.close,
+                result.strength
+            );
+
+        }
+        else {
+
+            setWait();
+
+            statusElement.textContent =
+                "OTC LIVE - WAIT";
+        }
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "OTC Signal Error:",
+            error
+        );
+
+
+        statusElement.textContent =
+            "OFFLINE";
+
+        setWait();
+
+        priceElement.textContent =
+            "--";
+
+        strengthElement.textContent =
+            "--";
+
+
+        showError(
+            error.message ||
+            "Unable to receive OTC data"
+        );
+
+    }
+    finally {
+
+        requestRunning = false;
+
+        generateBtn.disabled = false;
+    }
+}
+
+
+/* ==============================
+   HISTORY
+============================== */
+
+function addHistory(
+    pair,
+    signal,
+    entry,
+    strength
+) {
+
+    const item = {
+
+        pair: pair,
+
+        signal: signal,
+
+        entry: entry,
+
+        strength: strength,
+
+        time: new Date().toISOString()
+    };
+
+
+    historyData.unshift(item);
+
+
+    if (historyData.length > 20) {
+
+        historyData =
+            historyData.slice(0, 20);
+    }
+
+
+    localStorage.setItem(
+        "otcSignalHistory",
+        JSON.stringify(historyData)
+    );
+
+
+    renderHistory();
+}
+
+
+/* ==============================
+   RENDER HISTORY
+============================== */
+
+function renderHistory() {
+
+    if (!historyData.length) {
+
+        historyElement.textContent =
+            "No signals yet";
+
+        return;
+    }
+
+
+    historyElement.innerHTML =
+        historyData.map(item => {
+
+            const time =
+                new Date(item.time)
+                .toLocaleTimeString(
+                    "en-IN",
+                    {
+                        timeZone:
+                            "Asia/Kolkata"
+                    }
+                );
+
+
+            return `
+                <div class="history-item">
+
+                    <b>${item.pair}</b><br>
+
+                    Signal:
+                    <b>${item.signal}</b><br>
+
+                    Entry:
+                    ${item.entry ?? "--"}<br>
+
+                    Strength:
+                    ${item.strength ?? 0}%<br>
+
+                    Time:
+                    ${time}
+
+                </div>
+            `;
+
+        }).join("");
 }
 
 
 renderHistory();
 
 
-/* =========================
+/* ==============================
+   BUTTON
+============================== */
+
+generateBtn.addEventListener(
+    "click",
+    generateSignal
+);
+
+
+/* ==============================
    TIMER
-========================= */
+============================== */
 
 function startTimer() {
 
-  clearInterval(timerInterval);
+    clearInterval(timerInterval);
 
-  timerValue = 60;
+    timerValue = 60;
 
-  document.getElementById(
-    "timer"
-  ).textContent = timerValue;
-
-
-  timerInterval =
-    setInterval(() => {
-
-      timerValue--;
-
-      document.getElementById(
-        "timer"
-      ).textContent =
+    timerElement.textContent =
         timerValue;
 
 
-      if (timerValue <= 0) {
+    timerInterval =
+        setInterval(() => {
 
-        timerValue = 60;
+            timerValue--;
 
-        generateSignal();
+            timerElement.textContent =
+                timerValue;
 
-      }
 
-    }, 1000);
+            if (timerValue <= 0) {
 
+                timerValue = 60;
+
+                generateSignal();
+            }
+
+        }, 1000);
 }
 
 
-/* =========================
-   START
-========================= */
-
 startTimer();
+
+
+/* ==============================
+   FIRST LOAD
+============================== */
+
+generateSignal();
 
 </script>
 

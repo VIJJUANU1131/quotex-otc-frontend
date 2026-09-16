@@ -1,3 +1,622 @@
-const url =
-  "https://quotex-otc-backend.onrender.com/api/v1/candles?symbol=" +
-  encodeURIComponent(pair);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quotex OTC Live Signal</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1020;
+  color: white;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 15px;
+}
+
+h1 {
+  text-align: center;
+  color: #00e5ff;
+  font-size: 25px;
+}
+
+.card {
+  background: #151c32;
+  border-radius: 15px;
+  padding: 18px;
+  margin-top: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,.3);
+}
+
+label {
+  display: block;
+  margin-bottom: 7px;
+  color: #aaa;
+}
+
+select,
+button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+}
+
+select {
+  background: #222b45;
+  color: white;
+}
+
+button {
+  margin-top: 15px;
+  background: #00c853;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.status {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.signal {
+  text-align: center;
+  font-size: 42px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+.buy {
+  color: #00e676;
+}
+
+.sell {
+  color: #ff1744;
+}
+
+.wait {
+  color: #ffc107;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.box {
+  background: #202941;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.value {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.timer {
+  text-align: center;
+  font-size: 30px;
+  color: #00e5ff;
+  margin-top: 10px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.stat {
+  background: #202941;
+  padding: 12px 5px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.history {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-item {
+  background: #202941;
+  padding: 10px;
+  margin-bottom: 7px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.win {
+  color: #00e676;
+  font-weight: bold;
+}
+
+.loss {
+  color: #ff1744;
+  font-weight: bold;
+}
+
+.pending {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.small {
+  text-align: center;
+  color: #888;
+  font-size: 12px;
+  margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📊 Quotex OTC Live Signal</h1>
+
+<div class="card">
+
+<label>OTC Pair</label>
+
+<select id="pair">
+
+<option value="AUDNZD_otc">AUD/NZD (OTC)</option>
+<option value="GBPNZD_otc">GBP/NZD (OTC)</option>
+<option value="NZDCAD_otc">NZD/CAD (OTC)</option>
+<option value="NZDUSD_otc">NZD/USD (OTC)</option>
+<option value="USDBRL_otc">USD/BRL (OTC)</option>
+<option value="USDDZD_otc">USD/DZD (OTC)</option>
+<option value="USDEGP_otc">USD/EGP (OTC)</option>
+<option value="USDNGN_otc">USD/NGN (OTC)</option>
+<option value="USDCOP_otc">USD/COP (OTC)</option>
+<option value="USDBDT_otc">USD/BDT (OTC)</option>
+<option value="USDPHP_otc">USD/PHP (OTC)</option>
+
+</select>
+
+<button onclick="generateSignal()">
+GENERATE LIVE SIGNAL
+</button>
+
+<div id="status" class="status">
+READY
+</div>
+
+<div id="signal" class="signal wait">
+WAIT
+</div>
+
+<div class="info">
+
+<div class="box">
+<div>PRICE</div>
+<div id="price" class="value">--</div>
+</div>
+
+<div class="box">
+<div>STRENGTH</div>
+<div id="strength" class="value">--</div>
+</div>
+
+</div>
+
+<div class="timer">
+Next Signal: <span id="timer">60</span>s
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>🇮🇳 Indian Time</h3>
+
+<div id="clock" class="value" style="text-align:center;">
+--
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>📈 Result Tracker</h3>
+
+<div class="stats">
+
+<div class="stat">
+WIN
+<div id="wins" class="value">0</div>
+</div>
+
+<div class="stat">
+LOSS
+<div id="losses" class="value">0</div>
+</div>
+
+<div class="stat">
+WIN RATE
+<div id="winrate" class="value">0%</div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>📜 Signal History</h3>
+
+<div id="history" class="history">
+No signals yet
+</div>
+
+</div>
+
+<div class="small">
+Real-data only • No fake signals
+</div>
+
+</div>
+
+
+<script>
+
+const BACKEND_URL =
+"https://quotex-otc-backend.onrender.com";
+
+let timerValue = 60;
+let timerInterval = null;
+
+let historyData =
+JSON.parse(localStorage.getItem("otcHistory") || "[]");
+
+
+/* =========================
+   INDIAN CLOCK
+========================= */
+
+function updateClock() {
+
+  const now = new Date();
+
+  const time = now.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    dateStyle: "medium",
+    timeStyle: "medium"
+  });
+
+  document.getElementById("clock").textContent = time;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+
+/* =========================
+   GENERATE SIGNAL
+========================= */
+
+async function generateSignal() {
+
+  const pair =
+    document.getElementById("pair").value;
+
+  const status =
+    document.getElementById("status");
+
+  const signal =
+    document.getElementById("signal");
+
+  const price =
+    document.getElementById("price");
+
+  const strength =
+    document.getElementById("strength");
+
+
+  status.textContent = "LOADING...";
+
+  signal.textContent = "WAIT";
+  signal.className = "signal wait";
+
+  price.textContent = "--";
+  strength.textContent = "--";
+
+
+  try {
+
+    const url =
+      BACKEND_URL +
+      "/api/v1/candles?symbol=" +
+      encodeURIComponent(pair);
+
+
+    console.log("Request:", url);
+
+
+    const response =
+      await fetch(url);
+
+
+    const data =
+      await response.json();
+
+
+    console.log("Backend Data:", data);
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.message ||
+        "Backend error"
+      );
+
+    }
+
+
+    status.textContent =
+      data.status || "UNKNOWN";
+
+
+    price.textContent =
+      data.price !== null &&
+      data.price !== undefined
+      ? data.price
+      : "--";
+
+
+    strength.textContent =
+      data.strength !== undefined
+      ? data.strength + "%"
+      : "--";
+
+
+    const currentSignal =
+      data.signal || "WAIT";
+
+
+    signal.textContent =
+      currentSignal;
+
+
+    if (currentSignal === "BUY") {
+
+      signal.className =
+        "signal buy";
+
+    }
+    else if (currentSignal === "SELL") {
+
+      signal.className =
+        "signal sell";
+
+    }
+    else {
+
+      signal.className =
+        "signal wait";
+
+    }
+
+
+    /*
+       Only BUY / SELL signals
+       are added to history.
+    */
+
+    if (
+      currentSignal === "BUY" ||
+      currentSignal === "SELL"
+    ) {
+
+      addSignalToHistory({
+        pair: pair,
+        signal: currentSignal,
+        entry: data.price,
+        strength: data.strength || 0,
+        time: new Date().toISOString()
+      });
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "Signal Error:",
+      error
+    );
+
+
+    status.textContent =
+      "OFFLINE";
+
+
+    signal.textContent =
+      "WAIT";
+
+
+    signal.className =
+      "signal wait";
+
+
+    price.textContent =
+      "--";
+
+
+    strength.textContent =
+      "--";
+
+  }
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function addSignalToHistory(item) {
+
+  historyData.unshift(item);
+
+  if (historyData.length > 20) {
+
+    historyData =
+      historyData.slice(0, 20);
+
+  }
+
+
+  localStorage.setItem(
+    "otcHistory",
+    JSON.stringify(historyData)
+  );
+
+
+  renderHistory();
+
+}
+
+
+/* =========================
+   RENDER HISTORY
+========================= */
+
+function renderHistory() {
+
+  const box =
+    document.getElementById("history");
+
+
+  if (!historyData.length) {
+
+    box.innerHTML =
+      "No signals yet";
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    historyData.map((item, index) => {
+
+      const time =
+        new Date(item.time)
+        .toLocaleTimeString("en-IN", {
+          timeZone: "Asia/Kolkata"
+        });
+
+
+      return `
+
+        <div class="history-item">
+
+          <b>${item.pair}</b><br>
+
+          Signal:
+          <b>${item.signal}</b><br>
+
+          Entry:
+          ${item.entry ?? "--"}<br>
+
+          Strength:
+          ${item.strength}%<br>
+
+          Time:
+          ${time}<br>
+
+          Result:
+          <span id="result-${index}"
+                class="pending">
+            PENDING
+          </span>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+renderHistory();
+
+
+/* =========================
+   TIMER
+========================= */
+
+function startTimer() {
+
+  clearInterval(timerInterval);
+
+  timerValue = 60;
+
+  document.getElementById(
+    "timer"
+  ).textContent = timerValue;
+
+
+  timerInterval =
+    setInterval(() => {
+
+      timerValue--;
+
+      document.getElementById(
+        "timer"
+      ).textContent =
+        timerValue;
+
+
+      if (timerValue <= 0) {
+
+        timerValue = 60;
+
+        generateSignal();
+
+      }
+
+    }, 1000);
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+startTimer();
+
+</script>
+
+</body>
+</html>
